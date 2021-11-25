@@ -26,6 +26,7 @@ def api_city_street(request, city_id):
         return JsonResponse(status=400)
 
 
+@api_view(['GET', 'POST'])
 def api_shop(request):
     # Пункт C
     if request.method == 'POST':
@@ -33,7 +34,7 @@ def api_shop(request):
         shop = Shop.objects.create(name=data['name'][0], house_number=data['house_number'][0],
                                    openTime=data['openTime'][0], closeTime=data['closeTime'][0],
                                    city_id=data['city_id'][0], street_id=data['street_id'][0])
-        serializer = ShopSerializers(shop)
+        serializer = ShopCreateSerializers(shop)
         return JsonResponse(serializer.data, safe=False, status=200)
     # Пункт D
     elif request.method == 'GET':
@@ -42,14 +43,14 @@ def api_shop(request):
         open = request.GET.get("open", "") == "1"
         if open:
             d = datetime.now()
-            shops = Shop.objects.filter(openTime__gte=d, closeTime__lt=d).filter(city__id=city).filter(
-                street__id=street)
+            shops = Shop.objects.filter(openTime__gte=d, closeTime__lt=d).filter(city__name=city).filter(
+                street__name=street)
             serializer = ShopSerializers(shops, many=True)
             return JsonResponse(serializer.data, safe=False, status=200)
         else:
             d = datetime.time(datetime.now())
-            shops = Shop.objects.exclude(openTime__gte=d, closeTime__lt=d).filter(city__id=city).filter(
-                street__id=street)
+            shops = Shop.objects.exclude(openTime__gte=d, closeTime__lt=d).filter(city__name=city).filter(
+                street__name=street)
             serializer = ShopSerializers(shops, many=True)
             return JsonResponse(serializer.data, safe=False, status=200)
     else:
