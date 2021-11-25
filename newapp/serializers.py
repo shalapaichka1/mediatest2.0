@@ -27,3 +27,9 @@ class ShopSerializers(serializers.ModelSerializer):
         json['city_name'] = instance.city.name
         json['street_name'] = instance.street.name
         return json
+
+
+class ShopCreateSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Shop
+        fields = ('id', )
