@@ -43,14 +43,14 @@ def api_shop(request):
         open = request.GET.get("open", "") == "1"
         if open:
             d = datetime.time(datetime.now())
-            shops = Shop.objects.filter(openTime__gte=d, closeTime__lt=d).filter(city__name=city).filter(
-                street__name=street)
+            shops = Shop.objects.filter(openTime__gte=d, closeTime__lt=d) \
+                .filter(city__name=city).filter(street__name=street)
             serializer = ShopSerializers(shops, many=True)
             return JsonResponse(serializer.data, safe=False, status=200)
         else:
             d = datetime.time(datetime.now())
-            shops = Shop.objects.exclude(openTime__gte=d, closeTime__lt=d).filter(city__name=city).filter(
-                street__name=street)
+            shops = Shop.objects.exclude(openTime__gte=d, closeTime__lt=d) \
+                .filter(city__name=city).filter(street__name=street)
             serializer = ShopSerializers(shops, many=True)
             return JsonResponse(serializer.data, safe=False, status=200)
     else:
