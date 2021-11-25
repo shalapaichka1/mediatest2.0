@@ -42,7 +42,7 @@ def api_shop(request):
         city = request.GET.get("city", "")
         open = request.GET.get("open", "") == "1"
         if open:
-            d = datetime.now()
+            d = datetime.time(datetime.now())
             shops = Shop.objects.filter(openTime__gte=d, closeTime__lt=d).filter(city__name=city).filter(
                 street__name=street)
             serializer = ShopSerializers(shops, many=True)
